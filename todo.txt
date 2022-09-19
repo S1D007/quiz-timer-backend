@@ -1,0 +1,2 @@
+1) Making Routes
+2) Move into Router Folder
