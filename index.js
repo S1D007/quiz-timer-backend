@@ -4,7 +4,7 @@
 // Imports 
 const express = require("express")
 const Router = require(__dirname+"/Router/routes.js") 
-
+const Database = require("./Database/Database")
 
 const app = express()
 

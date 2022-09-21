@@ -1,2 +1,5 @@
-1) Making Routes
-2) Move into Router Folder
+1) Making Routes ✅
+2) Move into Router Folder ✅
+3) Making The /add-question route ✅
+4) Making the route Functionable ✅
+5) 
