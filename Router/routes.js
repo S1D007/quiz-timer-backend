@@ -63,5 +63,13 @@ route.get('/get-single-question/:id',async(req,res)=>{
     res.json(data)
 })
 
+route.get("/get-question-with-params",async(req,res)=>{
+    const {category,level,limit} = req.query
+    const doc = await Question.find({
+        category,
+        level
+    }).limit(limit)
+    res.status(200).send(doc)
+})
 
 module.exports = route

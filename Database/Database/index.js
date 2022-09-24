@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Establishing Connection with MongoDB with the MongoDB Database Driver  for nodejs - Mongoose
 
-const urlOfDatabase = "mongodb://127.0.0.1:27017/test"
+const urlOfDatabase = "mongodb+srv://amrendra-quiz-timer:mnbvcxz@quiz-timer-database.cfotuau.mongodb.net/Questions?retryWrites=true&w=majority"
 
 
 mongoose.connect(urlOfDatabase).then(()=>{
