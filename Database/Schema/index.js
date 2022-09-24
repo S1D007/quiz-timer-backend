@@ -20,7 +20,7 @@ const QuestionSchema = mongoose.Schema({
 
     },
     options:{
-        type:"String",
+        type:"Array",
         required:true,
 
     },
@@ -32,12 +32,10 @@ const QuestionSchema = mongoose.Schema({
     price:{
         type:"Number",
         required:true,
-
     },
     prize:{
         type:"Number",
         required:true,
-
     },
 })
 
