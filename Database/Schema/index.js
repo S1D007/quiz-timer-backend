@@ -27,7 +27,6 @@ const QuestionSchema = mongoose.Schema({
     correctAnswer:{
         type:"String",
         required:true,
-
     },
     price:{
         type:"Number",

@@ -13,12 +13,12 @@ app.use(Router)
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
-const Port = 1234||process.env.PORT
+const Port = 1111||process.env.PORT
 
 // at "localhost:port'/' "
-app.post("/",(req,res)=>{
+app.get("/",(req,res)=>{
     // res.send("Hello World")
-    res.send(req.body)
+    res.send("Welcome To Quiz-Timer-Backend")
 })
 
 // Init of app

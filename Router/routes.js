@@ -1,5 +1,6 @@
 const express = require("express")
 const Question = require("../Database/Models/index")
+const UserInformation = require("../Database/Models/index2")
 const route = express.Router()
 route.use(express.json());
 // Routes 
@@ -64,12 +65,22 @@ route.get('/get-single-question/:id',async(req,res)=>{
 })
 
 route.get("/get-question-with-params",async(req,res)=>{
-    const {category,level,limit} = req.query
+    const {category,level,limit,email} = req.query
     const doc = await Question.find({
         category,
         level
     }).limit(limit)
-    res.status(200).send(doc)
+    try{
+        const doc2 = new UserInformation({
+            questions:doc,
+            email,
+        })
+        await doc2.save()
+        res.status(200).send(doc)
+    }catch(e){
+        res.send({
+            error:e.message
+        })
+    }
 })
-
 module.exports = route
