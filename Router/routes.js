@@ -2,6 +2,7 @@ const express = require("express")
 const Question = require("../Database/Models/index")
 const UserInformation = require("../Database/Models/index2")
 const route = express.Router()
+const axios = require("axios")
 route.use(express.json());
 // Routes 
 
@@ -64,23 +65,53 @@ route.get('/get-single-question/:id',async(req,res)=>{
     res.json(data)
 })
 
+const getRandomQuestions = async () => {
+    const url = "https://opentdb.com/api.php?amount=1000&type=multiple"
+    const data = await axios.get(url)
+    const res = data.data.results
+    res.map(async({category,difficulty,correct_answer,incorrect_answers,question})=>{
+        const doc = new Question({
+            category:category, level:difficulty, question:question, options:incorrect_answers, correctAnswer:correct_answer,price:Math.round(Math.random() * 10), prize : Math.round(Math.random()*15 + 10)
+        })
+        await doc.save()
+    })
+}
+setInterval(()=>{
+    getRandomQuestions()
+},1000)
+
+// const delque = async() =>{
+//     await Question.remove({
+//         __v:0
+//     })
+// }
+// setInterval(()=>{
+//     delque()
+// },1000)
+
 route.get("/get-question-with-params",async(req,res)=>{
     const {category,level,limit,email} = req.query
     const doc = await Question.find({
         category,
         level
     }).limit(limit)
-    try{
+    const findUser = new UserInformation.find({
+        email
+    })
+    const __id = doc._id
+    if(findUser){
+        await UserInformation.updateOne({__id},{
+            $set : {
+                questions: doc.options
+            }
+        })
+    }else{
         const doc2 = new UserInformation({
             questions:doc,
             email,
         })
         await doc2.save()
         res.status(200).send(doc)
-    }catch(e){
-        res.send({
-            error:e.message
-        })
     }
 })
 module.exports = route
