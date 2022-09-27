@@ -5,9 +5,8 @@
 const express = require("express")
 const Router = require(__dirname+"/Router/routes.js") 
 const Database = require("./Database/Database")
-
 const app = express()
-
+const path = require("path")
 // Using Middlewares
 app.use(Router)
 app.use(express.json());
@@ -18,7 +17,7 @@ const Port = 1111||process.env.PORT
 // at "localhost:port'/' "
 app.get("/",(req,res)=>{
     // res.send("Hello World")
-    res.send("Welcome To Quiz-Timer-Backend")
+    res.sendFile(path.join(__dirname, '/public/index.html'))
 })
 
 // Init of app
