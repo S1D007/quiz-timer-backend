@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const UserInformation = require("../Models/index2")
 
 /* Creating Schema for the Parameter's */
 
@@ -12,4 +13,23 @@ const UserSchema = mongoose.Schema({
         required:true
     }
 })
+
+UserSchema.methods.user = async function(next){
+    const email = this.email
+    const id = this.id
+    const getUserInfo = await UserInformation.findOne({
+        email
+    })
+    if(getUserInfo.email === email){
+        const allID = [getUserInfo.questionsID,id]
+        await UserInformation.updateOne({email},{
+            $set:{
+                questionsID:allID
+            }
+        })
+        const getInfoAfterSaving = await UserInformation.findOne({email})
+        const currID = getInfoAfterSaving.questionsID.flat()
+        return currID
+    }
+}
 module.exports = UserSchema
