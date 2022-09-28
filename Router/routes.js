@@ -101,33 +101,47 @@ route.get("/get-question-with-params", async (req, res) => {
         category,
         level
     }).limit(limit)
-    const findUser = await UserInformation.findOne({
+    const id = []
+    doc.map(({ _id }) => id.push(_id.toString()))
+    const userInfo = await UserInformation.findOne({
         email
     })
-    // console.log(doc.options)
-    // const opt =  findUser.options
-    if (findUser.email === email) {
-        await UserInformation.updateOne({
+    if (userInfo?.email === email) {
+        const docFind = await UserInformation.findOne({
             email
-        }, {
+        })
+        const prevID = docFind.questionsID.flat()
+        const allID = [...prevID,...id] 
+        // const currID = [...allID]
+        await UserInformation.updateOne({ email }, {
             $set: {
-                questions: doc
+                questionsID: allID
             }
         })
-        res.status(200).send({
-            length: doc.length,
-            data: doc
+        const docFindAfter = await UserInformation.findOne({
+            email
         })
+        const newID = docFindAfter.questionsID.flat()
+        const docs = await Question.find({ _id: { $nin: newID } , category, level}).limit(limit)
+        res.send(docs)
     } else {
-        const doc2 = new UserInformation({
-            questions: doc,
-            email,
+        const docAdd = new UserInformation({
+            questionsID: id,
+            email
         })
-        await doc2.save()
-        res.status(200).send({
-            length: doc.length,
-            data: doc
-        })
+        await docAdd.save()
+        res.send(doc)
     }
+    // res.send(docs)
+})
+
+route.get("/getGeoUQestions",async(req,res)=>{
+    const doc = await Question.find({
+        category:"Geography",
+        level:"easy"
+    })
+    console.log(doc.length)
+    res.send(doc)
 })
 module.exports = route
+
