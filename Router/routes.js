@@ -86,15 +86,6 @@ setInterval(() => {
     getRandomQuestions()
 }, 3600000)
 
-// const delque = async() =>{
-//     await Question.deleteMany({
-//         __v:0
-//     })
-// }
-// setInterval(()=>{
-//     delque()
-// },100)
-
 route.get("/get-question-with-params", async (req, res) => {
     const { category, level, limit, email } = req.query
     const doc = await Question.find({
